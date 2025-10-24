@@ -5,8 +5,11 @@
   - [x] Landing section
     - [ ] Dotted background [code used](https://codepen.io/edmundojr/pen/xOYJGw)
   - [ ] Map section
-    - [ ] Write field files
-    - [ ] Wire files to network
+    - [x] Write field files
+    - [x] Prepare file info for D3
+    - [x] Plot a network graph
+      - [x] https://reactviz.com/scatterplots/basic + https://d3-graph-gallery.com/graph/network_basic.**html**
+      - [ ] Make node interactive
 
 - [ ] Complete design checklist
 - [ ] Check Next documentation

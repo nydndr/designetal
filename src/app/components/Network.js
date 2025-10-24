@@ -1,67 +1,56 @@
-import path from "path";
-import fs, { link } from "fs";
-import matter from "gray-matter";
+"use client";
 
-function getAllFields() {
-  const fieldsDirectory = path.join(process.cwd(), "data", "fields");
-  const allFieldsFileNames = fs.readdirSync(fieldsDirectory);
+import * as d3 from "d3";
+import { useEffect, useRef } from "react";
+import { RADIUS, drawNetwork } from "./drawNetwork";
 
-  const allFieldsIndexed = [];
+export default function Network(data) {
+  const margin = { top: 10, right: 30, bottom: 30, left: 40 };
+  const width = window.innerWidth * 0.5;
+  const height = window.innerHeight * 0.5;
 
-  allFieldsFileNames.forEach((fieldFileName, fieldIndex) => {
-    const fieldContent = fs.readFileSync(
-      path.join(fieldsDirectory, fieldFileName),
-      "utf8"
-    );
-    const fieldMetadata = matter(fieldContent).data;
-    const fieldTitle = fieldMetadata.title;
-    const fieldSubFieldsTitles = fieldMetadata.sub_fields;
+  // read the data
 
-    allFieldsIndexed.push({
-      fieldFileName: fieldFileName,
-      fieldIndex: fieldIndex,
-      fieldMetadata: fieldMetadata,
-      fieldTitle: fieldTitle,
-      fieldSubFieldsTitles: fieldSubFieldsTitles,
-    });
-  });
+  const nodes = data.data.nodes;
+  const links = data.data.links;
 
-  const nodesJSON = [];
-  const linksJSON = [];
-  allFieldsIndexed.forEach((field) => {
-    nodesJSON.push({ id: field.fieldIndex, name: field.fieldTitle });
+  const canvasRef = useRef(null);
 
-    const hasSubFields = field.fieldSubFieldsTitles === null ? false : true;
+  // compute the nodes position using a d3-force
 
-    if (field.fieldSubFieldsTitles !== null)
-      field.fieldSubFieldsTitles
-        .replace(/\s/g, "")
-        .split(",")
-        .forEach((title) => {
-          allFieldsIndexed.forEach((indexedField) => {
-            if (indexedField.fieldFileName.replace(/.mdx/g, "") === title)
-              linksJSON.push({
-                source: field.fieldIndex,
-                target: indexedField.fieldIndex,
-              });
-          });
-        });
-  });
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const context = canvas?.getContext("2d");
 
-  return { nodes: nodesJSON, links: linksJSON };
-}
+    if (!context) {
+      return;
+    }
 
-export default function Network() {
-  const fields = getAllFields();
+    d3.forceSimulation(nodes)
+      .force(
+        "link",
+        d3.forceLink(links).id((d) => d.id)
+      )
+      .force("collide", d3.forceCollide().radius(RADIUS))
+      .force("charge", d3.forceManyBody())
+      .force("center", d3.forceCenter(width / 2, height / 2))
 
-  console.log(fields);
+      .on("tick", () => {
+        drawNetwork(context, width, height, nodes, links);
+      });
+
+    // build the links
+    // build the nodes
+  }, [width, height, nodes, links]);
 
   return (
-    <ul>
-      <h1>AAAAA</h1>
-      {/* {fields.map((field) => (
-        <li key={field}>{field}</li>
-      ))} */}
-    </ul>
+    <div>
+      <canvas
+        ref={canvasRef}
+        style={{ width, height }}
+        width={width}
+        height={height}
+      ></canvas>
+    </div>
   );
 }
