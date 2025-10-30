@@ -3,21 +3,24 @@
 - [ ] MVP
 
   - [x] Landing section
-    - [ ] Dotted background [code used](https://codepen.io/edmundojr/pen/xOYJGw)
+    - [x] Dotted background [code used](https://codepen.io/edmundojr/pen/xOYJGw)
   - [ ] Map section
     - [x] Write field files
     - [x] Prepare file info for D3
     - [x] Plot a network graph
       - [x] https://reactviz.com/scatterplots/basic + https://d3-graph-gallery.com/graph/network_basic.**html**
-      - [ ] Make node interactive
+      - [x] Just rewrite the whole thing with [this](https://medium.com/@abdulmajeedamm33/elevating-network-visualizations-d3-force-next-js-2ce1a322d746)
+      - [ ] When click open Product Design page
+      - [ ] When hover others show `COMING SOON`
+      - [ ] Polish the visual a tad bit
+
+## Future
 
 - [ ] Complete design checklist
 - [ ] Check Next documentation
 - [ ] Check Tailwind documentation
 - [ ] Check animation articles
-
-## Future
-
+- [ ] Add a button the view of a field that allows navigation on network (go deeper, go broader)
 - [ ] Add dark mode
 - [ ] Add random field button [Inspo from Winamp Skin Museum](https://skins.webamp.org/)
 - [ ] Add feedback / nomination / early contributor flow

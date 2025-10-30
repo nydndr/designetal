@@ -1,11 +1,18 @@
-import Image from "next/image";
+import matter from "gray-matter";
 import Link from "next/link";
 import Network from "./components/Network";
 import path from "path";
 import fs from "fs";
-import matter from "gray-matter";
 
 function getAllFields() {
+  const MAIN_NODE_SIZE = 40;
+  const CHILD_NODE_SIZE = 15;
+  const LEAF_NODE_SIZE = 5;
+  const DEFAULT_DISTANCE = 90;
+  const MAIN_NODE_DISTANCE = 90;
+  const LEAF_NODE_DISTANCE = 5;
+  const MANY_BODY_STRENGTH = -180;
+
   const fieldsDirectory = path.join(process.cwd(), "data", "fields");
   const allFieldsFileNames = fs.readdirSync(fieldsDirectory);
 
@@ -46,6 +53,9 @@ function getAllFields() {
               linksJSON.push({
                 source: field.fieldIndex,
                 target: indexedField.fieldIndex,
+                distance: MAIN_NODE_DISTANCE,
+                size: CHILD_NODE_SIZE,
+                color: "#131313",
               });
           });
         });
@@ -102,8 +112,8 @@ export default async function Home() {
           </div>
         </div>
         <div className="w-2/3">
-          <p>Designed, developed and curated by Dandara</p>
           <Network data={data} />
+          <p>Designed, developed and curated by Dandara</p>
         </div>
       </div>
     </>
